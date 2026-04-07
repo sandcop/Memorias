@@ -428,10 +428,11 @@ body::before {
 
 <script>
 /* ══════════════════════════════
-   CONFIG  ← cambia tu Client ID aquí
+   CONFIG
 ══════════════════════════════ */
-const CLIENT_ID = '116190954122-9uek5l0q1m8khdd6g2t78aioq0tr9jeb.apps.googleusercontent.com';
-const SCOPE     = 'https://www.googleapis.com/auth/photospicker.mediaitems.readonly https://www.googleapis.com/auth/userinfo.profile';
+const CLIENT_ID    = '116190954122-9uek5l0q1m8khdd6g2t78aioq0tr9jeb.apps.googleusercontent.com';
+const SCOPE        = 'https://www.googleapis.com/auth/photospicker.mediaitems.readonly https://www.googleapis.com/auth/userinfo.profile';
+const REDIRECT_URI = 'https://sandcop.github.io/Memorias/';
 
 /* ══════════════════════════════
    COLLAGE BACKGROUND
@@ -522,7 +523,7 @@ function show(id){
 function startLogin(){
   const p = new URLSearchParams({
     client_id: CLIENT_ID,
-    redirect_uri: location.origin + location.pathname,
+    redirect_uri: REDIRECT_URI,
     response_type: 'token',
     scope: SCOPE,
     prompt: 'consent select_account'
