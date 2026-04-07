@@ -284,15 +284,16 @@ body::before {
 
   <!-- álbum compartido banner -->
   <div class="shared-banner" id="shared-banner">
-    <p>Comparte este enlace con tu familia para que puedan agregar fotos al álbum desde su teléfono — sin necesitar cuenta Google.</p>
-    <div class="shared-link">
-      <input type="text" id="shared-link-input" readonly placeholder="configura tu álbum compartido en Google Photos y pega el link aquí">
+    <p><strong style="font-weight:400;color:var(--ink)">Álbum compartido · cómo funciona:</strong> crea un álbum en Google Photos, activa "compartir con link" y pega ese link aquí. Tu familia lo abre desde el celular y puede subir fotos directamente — sin necesitar cuenta Google.</p>
+    <div class="shared-link" style="margin-top:.8rem">
+      <input type="text" id="shared-link-input" placeholder="https://photos.app.goo.gl/..." oninput="saveSharedLink(this.value)">
       <button onclick="copySharedLink()">copiar link</button>
     </div>
+    <p style="margin-top:.6rem;font-size:11px;color:var(--ink-ghost);font-style:italic">el link se guarda en este navegador para no tener que pegarlo de nuevo</p>
   </div>
 
   <div class="pick-banner" id="pick-banner">
-    <p>¿Quieres agregar más recuerdos desde Google Photos?</p>
+    <p>Las fotos se cargan en cada sesión desde Google Photos · selecciona de nuevo si cambiaste de dispositivo</p>
     <div style="display:flex;gap:8px">
       <button class="btn-subtle" onclick="toggleSharedBanner()">álbum compartido</button>
       <button class="btn-subtle" onclick="pickMore()">seleccionar fotos</button>
@@ -506,12 +507,30 @@ async function startPickerSession(token){
     const sess=await r.json();
     if(!sess.pickerUri) throw new Error();
     sessionStorage.setItem('gp_session',sess.id);
-    window.open(sess.pickerUri,'_blank','width=500,height=720');
-    setMsg('selecciona tus fotos y cierra la ventana…');
+    const popup=window.open(sess.pickerUri,'_blank','width=500,height=720');
+    if(!popup){
+      /* popup bloqueado — mostrar link manual */
+      setMsg('tu navegador bloqueó la ventana · haz clic abajo para abrir Google Photos');
+      const btn=document.createElement('a');
+      btn.href=sess.pickerUri; btn.target='_blank';
+      btn.style.cssText='margin-top:1rem;font-family:Cormorant Garamond,serif;font-size:13px;font-style:italic;color:var(--accent);letter-spacing:.05em;';
+      btn.textContent='→ abrir google photos para seleccionar fotos';
+      document.getElementById('screen-loading').appendChild(btn);
+    } else {
+      setMsg('selecciona tus fotos en google photos y cierra la ventana…');
+    }
+    let pollCount=0;
     window._poll=setInterval(async()=>{
-      const rd=await fetch(`https://photospicker.googleapis.com/v1/sessions/${sess.id}`,{headers:{Authorization:'Bearer '+token}});
-      const d=await rd.json();
-      if(d.mediaItemsSet){clearInterval(window._poll);await loadItems(token,sess.id);}
+      pollCount++;
+      /* timeout de seguridad: después de 3 min mostrar botón de reintento */
+      if(pollCount===60){
+        setMsg('si ya seleccionaste las fotos, recarga la página (F5)');
+      }
+      try{
+        const rd=await fetch(`https://photospicker.googleapis.com/v1/sessions/${sess.id}`,{headers:{Authorization:'Bearer '+token}});
+        const d=await rd.json();
+        if(d.mediaItemsSet){clearInterval(window._poll);await loadItems(token,sess.id);}
+      }catch(e){}
     },3000);
   }catch(e){loadDemo();}
 }
@@ -532,7 +551,7 @@ async function loadItems(token,sessionId){
       h:200+Math.floor(Math.random()*160),
       blob:null,blobFull:null,
     }));
-    renderGallery();show('screen-gallery');loadBlobs(token);
+    renderGallery();show('screen-gallery');loadSharedLink();loadBlobs(token);
   }catch(e){loadDemo();}
 }
 async function loadBlobs(token){
@@ -591,7 +610,7 @@ function loadDemo(){
   items=seeds.map(([name,date,year,month,type,hue],i)=>({id:'demo-'+i,name,date,year,month,type,src:'',baseUrl:'',url:'#',hue,h:190+Math.floor(Math.random()*150),blob:null,blobFull:null}));
   document.getElementById('demo-notice').style.display='block';
   document.getElementById('header-meta').innerHTML='demo<br>'+new Date().toLocaleDateString('es-CL',{year:'numeric',month:'long'});
-  renderGallery();show('screen-gallery');
+  renderGallery();show('screen-gallery');loadSharedLink();
 }
 
 /* ══ RENDER GALLERY ══ */
@@ -784,6 +803,13 @@ function saveMemory(){
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 /* ══ ÁLBUM COMPARTIDO ══ */
+function saveSharedLink(val){
+  localStorage.setItem('gp_shared_link', val);
+}
+function loadSharedLink(){
+  const saved=localStorage.getItem('gp_shared_link');
+  if(saved) document.getElementById('shared-link-input').value=saved;
+}
 function toggleSharedBanner(){
   const b=document.getElementById('shared-banner');
   b.style.display=b.style.display==='block'?'none':'block';
