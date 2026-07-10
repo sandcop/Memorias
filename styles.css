@@ -596,6 +596,9 @@ header.scrolled .menu-toggle span{ background:var(--blue-dark); }
   display:grid; grid-template-columns:1.05fr 1.6fr; gap:1.4rem;
   align-items:stretch;
 }
+/* el display:grid de arriba pisa el display:none nativo de [hidden];
+   esta regla devuelve el comportamiento correcto a los paneles ocultos */
+.catalog[hidden]{ display:none; }
 .equipo-feature{
   position:relative; overflow:hidden;
   display:flex; flex-direction:column; justify-content:flex-end;
