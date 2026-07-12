@@ -595,8 +595,8 @@
 </section>
 
 <!-- ================= BLOG ================= -->
-<!-- Títulos y textos son de ejemplo (tono del negocio). Enlaces "Seguir leyendo" en placeholder (#)
-     hasta que existan páginas de artículo reales. -->
+<!-- Listado completo, publicado desde el CRM (Ajustes → Blog) hacia Sanity.
+     renderHomeBlogListing() en script.js llena #blog-grid-container. -->
 <section id="blog">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
@@ -605,51 +605,8 @@
       <p>Notas cortas sobre portabilidad, fibra y equipos, para que decidas con información real, no con letra chica.</p>
     </div>
 
-    <div class="blog-grid reveal">
-      <article class="blog-featured">
-        <div class="blog-featured-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        </div>
-        <h3>Todo lo que debes saber antes de portarte a Movistar</h3>
-        <p>Requisitos, tiempos y lo que reviso antes de iniciar tu portabilidad, explicado sin tecnicismos.</p>
-        <a class="btn-link btn-link--light" href="#">Seguir leyendo <svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg></a>
-      </article>
-
-      <div class="blog-col">
-        <article class="blog-post">
-          <h3>Fibra vs. internet móvil: ¿cuál conviene en tu caso?</h3>
-          <p>Cuándo compensa instalar fibra en casa y cuándo un plan móvil con buenos datos es suficiente.</p>
-          <a class="btn-link btn-link--light" href="#">Seguir leyendo <svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg></a>
-        </article>
-        <article class="blog-post">
-          <h3>Cómo financiar tu próximo celular sin pie inicial</h3>
-          <p>Boleta, tarjeta o entregar tu equipo actual: qué opción conviene según tu presupuesto.</p>
-          <a class="btn-link btn-link--light" href="#">Seguir leyendo <svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg></a>
-        </article>
-        <article class="blog-post">
-          <h3>Prepago a postpago: la guía para cambiarte sin líos</h3>
-          <p>Qué pasa con tu número, tus datos y tu saldo al migrar. Paso a paso, sin sorpresas.</p>
-          <a class="btn-link btn-link--light" href="#">Seguir leyendo <svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg></a>
-        </article>
-      </div>
-
-      <div class="blog-col">
-        <article class="blog-post">
-          <h3>Movistar Full: fibra y móvil en una sola cuenta</h3>
-          <p>Cómo funciona el plan combinado y cuánto puedes simplificar tu facturación mensual.</p>
-          <a class="btn-link btn-link--light" href="#">Seguir leyendo <svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg></a>
-        </article>
-        <article class="blog-post">
-          <h3>5G en Antofagasta: qué cambia para tu plan actual</h3>
-          <p>Cobertura, velocidades reales y si vale la pena migrar tu línea a un plan 5G hoy.</p>
-          <a class="btn-link btn-link--light" href="#">Seguir leyendo <svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg></a>
-        </article>
-        <article class="blog-post">
-          <h3>Qué llevar a la sucursal para contratar sin vueltas</h3>
-          <p>La lista exacta de documentos para portabilidad, líneas nuevas y financiamiento de equipos.</p>
-          <a class="btn-link btn-link--light" href="#">Seguir leyendo <svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg></a>
-        </article>
-      </div>
+    <div id="blog-grid-container">
+      <p style="text-align:center;color:rgba(255,255,255,.6);">Cargando artículos…</p>
     </div>
   </div>
 </section>
@@ -790,7 +747,8 @@
       </div>
 
       <button type="submit" class="btn btn-primary modal-submit">Confirmar solicitud</button>
-      <p class="modal-note">Vista de ejemplo — este formulario todavía no está conectado a un backend real.</p>
+      <p class="modal-note" id="modal-error" hidden style="color:#f87171;"></p>
+      <p class="modal-note">Te contactaré personalmente para coordinar los siguientes pasos.</p>
     </form>
 
     <div class="modal-success" id="contractSuccess" hidden>
@@ -809,6 +767,7 @@
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.7.3.2.5.1.7-.1l1-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.2 1.1Z"/></svg>
 </a>
 
+<script src="sanity.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

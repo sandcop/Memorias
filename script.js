@@ -2,7 +2,13 @@
    CONFIG — edita aquí sin tocar el resto del código
    ========================================================== */
 const CONFIG = {
-  whatsapp: "56961017402"
+  whatsapp: "56961017402",
+  /* Backend del CRM (Manu Conecta). Pega aquí la URL que te da Apps
+     Script al desplegar eac/crm/Code.gs como aplicación web — hasta
+     entonces el popup "Contratar" guarda el intento localmente y no
+     falla, pero no crea el lead en el CRM. */
+  scriptUrl: "PENDIENTE_DESPLEGAR_CODE_GS",
+  crmToken: "qkD1yR6CD6xPm1pzRUmACLMtz3JyLRZf"
 };
 
 /* ==========================================================
@@ -245,7 +251,8 @@ updateHeaderOnScroll();
   renderPlans();
   updatePhoto();
 
-  /* ---- modal: contratar (vista de ejemplo, sin backend aún) ---- */
+  /* ---- modal: contratar (crea el lead en el backend al enviar) ---- */
+  let currentModalPlan = null;
   const backdrop        = document.getElementById("contractBackdrop");
   const modal            = document.getElementById("contractModal");
   const modalTitle       = document.getElementById("contractModalTitle");
@@ -336,6 +343,7 @@ updateHeaderOnScroll();
     selId = selId != null ? selId : selectedId;
     const plan = PLANS[cat].find(p => p.id === selId);
     const fields = CATEGORY_FIELDS[cat];
+    currentModalPlan = { category: cat, categoryLabel: CATEGORY_LABELS[cat], name: plan.name };
     modalTitle.textContent = `Contratar ${CATEGORY_LABELS[cat]}`;
     modalSummary.innerHTML = `<strong>${plan.name}</strong><span>${CATEGORY_LABELS[cat]} · ${plan.price}${plan.priceNote}</span>`;
 
@@ -373,14 +381,51 @@ updateHeaderOnScroll();
     if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
   });
 
-  modalForm.addEventListener("submit", (e) => {
+  const modalErrorEl = document.getElementById("modal-error");
+
+  modalForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!modalForm.checkValidity()) {
       modalForm.reportValidity();
       return;
     }
-    modalForm.hidden = true;
-    modalSuccess.hidden = false;
+
+    const submitBtn = modalForm.querySelector(".modal-submit");
+    const originalLabel = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando…";
+    modalErrorEl.hidden = true;
+
+    const payload = {
+      type: "createLead",
+      token: CONFIG.crmToken,
+      fromWebsite: true,
+      nombre: document.getElementById("cf-name").value.trim(),
+      telefono: document.getElementById("cf-phone").value.trim(),
+      correo: document.getElementById("cf-email").value.trim(),
+      direccion: document.getElementById("cf-address").value.trim(),
+      direccion_instalacion: installWrap.hidden ? "" : (document.getElementById("cf-install").value || "").trim(),
+      plan_categoria: currentModalPlan ? currentModalPlan.categoryLabel : "",
+      plan_nombre: currentModalPlan ? currentModalPlan.name : "",
+      lineas_json: linesWrap.hidden ? "" : JSON.stringify(lines),
+      origen: "landing-popup"
+    };
+
+    try {
+      if (CONFIG.scriptUrl && CONFIG.scriptUrl !== "PENDIENTE_DESPLEGAR_CODE_GS") {
+        const url = CONFIG.scriptUrl + "?data=" + encodeURIComponent(JSON.stringify(payload));
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+      }
+      modalForm.hidden = true;
+      modalSuccess.hidden = false;
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+      modalErrorEl.textContent = "No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos directo por WhatsApp.";
+      modalErrorEl.hidden = false;
+    }
   });
 
   /* ---- Movistar Full: fondo cambia según la tarjeta seleccionada, 1 solo CTA ---- */
@@ -473,3 +518,51 @@ const io = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 revealEls.forEach(el => io.observe(el));
+
+/* ---------- Blog: listado completo, real, desde Sanity (con estado vacío) ---------- */
+async function renderHomeBlogListing() {
+  const container = document.getElementById("blog-grid-container");
+  if (!container) return;
+
+  const postLink = (p) => `blog-post.html?slug=${encodeURIComponent(p.slug)}`;
+  const arrowSvg = `<svg viewBox="0 0 14 10" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg>`;
+  const fmtDate = (iso) => new Date(iso).toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" });
+  const featuredItem = (p) => `
+    <article class="blog-featured">
+      <div class="blog-featured-visual" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <span class="blog-listing-date">${fmtDate(p.publishedAt)}</span>
+      <h3>${escHtml(p.title)}</h3>
+      <p>${escHtml(p.excerpt || "")}</p>
+      <a class="btn-link btn-link--light" href="${postLink(p)}">Seguir leyendo ${arrowSvg}</a>
+    </article>`;
+  const postItem = (p) => `
+    <article class="blog-listing-card">
+      <span class="blog-listing-date">${fmtDate(p.publishedAt)}</span>
+      <h3>${escHtml(p.title)}</h3>
+      <p>${escHtml(p.excerpt || "")}</p>
+      <a class="btn-link btn-link--light" href="${postLink(p)}">Seguir leyendo ${arrowSvg}</a>
+    </article>`;
+
+  try {
+    const posts = await sanityQuery('*[_type=="post"]|order(publishedAt desc){title,excerpt,"slug":slug.current,publishedAt}');
+    if (!posts || !posts.length) {
+      container.innerHTML = `
+        <div class="blog-empty">
+          <p>Muy pronto vas a encontrar aquí guías sobre portabilidad, fibra y equipos. Mientras tanto, escríbeme directo si tienes una duda.</p>
+          <a class="btn btn-wsp" href="https://wa.me/56961017402?text=Hola%20Manu%2C%20tengo%20una%20consulta" target="_blank" rel="noopener">Escríbeme por WhatsApp</a>
+        </div>`;
+      return;
+    }
+    const rest = posts.slice(1);
+    let html = `<div class="blog-listing">`;
+    html += featuredItem(posts[0]);
+    if (rest.length) html += `<div class="blog-listing-grid">${rest.map(postItem).join("")}</div>`;
+    html += `</div>`;
+    container.innerHTML = html;
+  } catch (err) {
+    container.innerHTML = `<p style="text-align:center;color:rgba(255,255,255,.6);">No pudimos cargar el blog por ahora.</p>`;
+  }
+}
+renderHomeBlogListing();

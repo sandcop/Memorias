@@ -880,10 +880,46 @@ header.scrolled .menu-toggle span{ background:var(--blue-dark); }
 
 .btn-link--light{ color:#8FD8FF; }
 
+.blog-empty{ text-align:center; max-width:480px; margin:0 auto; padding:2.5rem 1rem; }
+.blog-empty p{ color:rgba(255,255,255,.72); font-size:1rem; line-height:1.6; margin-bottom:1.4rem; }
+
+.blog-listing{ display:flex; flex-direction:column; gap:3rem; }
+.blog-listing-date{
+  display:block; font-family:var(--mono); font-size:.7rem;
+  letter-spacing:.06em; color:rgba(255,255,255,.5); margin-bottom:.5rem; text-transform:capitalize;
+}
+.blog-listing-grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1.4rem;
+}
+.blog-listing-card{
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r-lg); padding:1.6rem;
+  transition:transform .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
+}
+.blog-listing-card:hover{ transform:translateY(-4px); border-color:rgba(255,255,255,.25); background:rgba(255,255,255,.08); }
+.blog-listing-card h3{ color:#fff; font-size:1.02rem; font-weight:700; letter-spacing:-.01em; margin-bottom:.4rem; }
+.blog-listing-card p{ font-size:.86rem; line-height:1.6; color:rgba(255,255,255,.62); margin-bottom:.9rem; }
+
 @media (max-width:900px){
   .blog-grid{ grid-template-columns:1fr; gap:2.4rem; }
   .blog-col{ border-left:0; padding-left:0; border-top:1px solid rgba(255,255,255,.14); padding-top:1.8rem; }
 }
+
+/* ==========================================================
+   BLOG — artículo individual (blog-post.html)
+   ========================================================== */
+#blog-post-section{ padding:9.5rem 0 5rem; }
+.blog-post-wrap{ max-width:720px; }
+.blog-post-date{
+  display:block; font-family:var(--mono); font-size:.76rem;
+  letter-spacing:.04em; color:var(--muted); margin:1.8rem 0 .6rem; text-transform:capitalize;
+}
+#blog-post-content h1{
+  font-family:var(--display); font-weight:800;
+  font-size:clamp(1.8rem, 4vw, 2.6rem); letter-spacing:-.02em;
+  color:var(--blue-dark); line-height:1.15; margin-bottom:1.8rem;
+}
+.blog-post-body p{ font-size:1.05rem; line-height:1.8; color:var(--ink-2); margin-bottom:1.3rem; }
 
 /* ==========================================================
    FAQ
