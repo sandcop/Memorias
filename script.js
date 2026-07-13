@@ -77,22 +77,6 @@ const PLAN_EXTRA_NOTES = {
   soloTv: ""
 };
 
-/* ==========================================================
-   TESTIMONIOS — EDITA AQUÍ. Los valores actuales son de ejemplo
-   (marcados entre corchetes) hasta que tengas citas reales de clientes.
-   ========================================================== */
-const TESTIMONIALS = [
-  { avatar: "CM", name: "[Nombre del cliente]", role: "Portabilidad + equipo",
-    headline: "[Frase corta y llamativa del testimonio]",
-    body: "[Testimonio real del cliente: qué contrató, cómo fue la atención y qué problema le resolviste.]" },
-  { avatar: "JP", name: "[Nombre del cliente]", role: "Fibra hogar",
-    headline: "[Frase corta y llamativa del testimonio]",
-    body: "[Testimonio real del cliente sobre la instalación de fibra o Movistar Full.]" },
-  { avatar: "AV", name: "[Nombre del cliente]", role: "Movistar Full",
-    headline: "[Frase corta y llamativa del testimonio]",
-    body: "[Testimonio real de un cliente empresa o de seguimiento post-venta.]" }
-];
-
 /* ---------- año footer ---------- */
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -104,24 +88,35 @@ function updateHeaderOnScroll() {
 window.addEventListener("scroll", updateHeaderOnScroll, { passive: true });
 updateHeaderOnScroll();
 
-/* ---------- selector interactivo de testimonios ---------- */
+/* ---------- testimonios: reseñas reales de Google (vía Code.gs) ---------- */
 (function(){
+  const wrap = document.getElementById("testiWrap");
   const list = document.getElementById("testiList");
   const headline = document.getElementById("testiHeadline");
   const body = document.getElementById("testiBody");
+  const badge = document.getElementById("testiBadge");
   if (!list) return;
+
+  let items = [];
   let active = 0;
+
+  function starString(rating) {
+    const n = Math.round(rating) || 0;
+    return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
+  }
 
   function renderList() {
     list.innerHTML = "";
-    TESTIMONIALS.forEach((t, i) => {
+    items.forEach((t, i) => {
       const tab = document.createElement("button");
       tab.type = "button";
       tab.className = "testi-tab" + (i === active ? " is-active" : "");
       tab.setAttribute("role", "tab");
       tab.setAttribute("aria-selected", String(i === active));
       tab.innerHTML = `
-        <span class="testi-tab-avatar" aria-hidden="true">${t.avatar}</span>
+        <span class="testi-tab-avatar" aria-hidden="true">${
+          t.photo ? `<img src="${t.photo}" alt="" loading="lazy">` : t.avatar
+        }</span>
         <span class="testi-tab-info">
           <strong>${t.name}</strong>
           <span>${t.role}</span>
@@ -136,13 +131,47 @@ updateHeaderOnScroll();
   }
 
   function renderDetail() {
-    const t = TESTIMONIALS[active];
-    headline.textContent = `"${t.headline}"`;
+    const t = items[active];
+    if (!t) return;
+    headline.textContent = starString(t.rating);
     body.textContent = t.body;
   }
 
-  renderList();
-  renderDetail();
+  async function loadReviews() {
+    try {
+      if (!CONFIG.scriptUrl || CONFIG.scriptUrl === "PENDIENTE_DESPLEGAR_CODE_GS") throw new Error("sin backend");
+      const payload = { type: "getGoogleReviews", token: CONFIG.crmToken };
+      const url = CONFIG.scriptUrl + "?data=" + encodeURIComponent(JSON.stringify(payload));
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error || !data.result || !data.result.reviews || !data.result.reviews.length) throw new Error("sin reseñas");
+
+      items = data.result.reviews
+        .filter(r => r.rating >= 4)
+        .map(r => ({
+          avatar: (r.author_name || "?").trim().charAt(0).toUpperCase(),
+          photo: r.profile_photo_url || "",
+          name: r.author_name || "Cliente Movistar",
+          role: r.relative_time_description || "",
+          rating: r.rating || 5,
+          body: r.text || ""
+        }));
+      if (!items.length) throw new Error("sin reseñas de 4+ estrellas");
+
+      if (wrap) wrap.hidden = false;
+      if (badge && data.result.rating) {
+        badge.hidden = false;
+        badge.querySelector("span").textContent =
+          `⭐ ${data.result.rating} · ${data.result.user_ratings_total || 0} reseñas en Google`;
+      }
+      renderList();
+      renderDetail();
+    } catch (err) {
+      if (wrap) wrap.hidden = true;
+    }
+  }
+
+  loadReviews();
 })();
 
 /* ---------- configurador de planes + modal de contratación ---------- */
