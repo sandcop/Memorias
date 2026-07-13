@@ -7,7 +7,7 @@ const CONFIG = {
      Script al desplegar eac/crm/Code.gs como aplicación web — hasta
      entonces el popup "Contratar" guarda el intento localmente y no
      falla, pero no crea el lead en el CRM. */
-  scriptUrl: "PENDIENTE_DESPLEGAR_CODE_GS",
+  scriptUrl: "https://script.google.com/macros/s/AKfycbzc3TsN0nzPSbvPjb_XCcSAPFyU2DoTlOKm8z39FgsSzg-Ni2QY_mqC6g4wALHnnne-/exec",
   crmToken: "qkD1yR6CD6xPm1pzRUmACLMtz3JyLRZf"
 };
 
