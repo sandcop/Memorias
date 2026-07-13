@@ -175,19 +175,12 @@ header.scrolled{
   height:72px;
 }
 .brand{
-  display:flex; align-items:center; gap:.65rem; text-decoration:none;
-  color:#fff; transition:color .3s var(--ease);
+  display:flex; align-items:center; text-decoration:none;
 }
-header.scrolled .brand{ color:var(--blue-dark); }
-.brand .dot{
-  width:11px; height:11px; border-radius:50%; flex:none;
-  background:linear-gradient(135deg, var(--blue), var(--turquoise));
-}
-.brand-name{ font-family:var(--display); font-weight:700; font-size:1.05rem; line-height:1.1; letter-spacing:-.01em; }
-.brand small{
-  display:block; font-family:var(--mono); font-weight:400;
-  font-size:.58rem; letter-spacing:.14em; opacity:.75; margin-top:2px;
-}
+.brand-logo{ height:34px; width:auto; display:block; }
+.brand-logo-dark{ display:none; }
+header.scrolled .brand-logo-light{ display:none; }
+header.scrolled .brand-logo-dark{ display:block; }
 
 .nav-links{ display:flex; gap:.4rem; list-style:none; }
 .nav-links a{
@@ -993,13 +986,8 @@ footer{
   padding-bottom:3rem;
 }
 .footer-logo{
-  display:inline-flex; align-items:center; gap:.6rem;
-  font-family:var(--display); font-weight:700; font-size:1.1rem;
-  color:var(--blue-dark); text-decoration:none; margin-bottom:.9rem;
-}
-.footer-logo .dot{
-  width:11px; height:11px; border-radius:50%;
-  background:linear-gradient(135deg, var(--blue), var(--turquoise));
+  display:inline-flex; align-items:center;
+  text-decoration:none; margin-bottom:.9rem;
 }
 .footer-brand p{ font-size:.92rem; color:var(--muted); max-width:24rem; }
 .footer-col h3{
