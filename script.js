@@ -17,7 +17,7 @@ const CONFIG = {
    ========================================================== */
 const PLANS = {
   movil: [
-    { id: 1, name: "Plan Libre 450", price: "$8.990", priceNote: " x 6 meses", oldPrice: "$15.990", discount: "44%",
+    { id: 1, name: "Plan Libre 450", price: "$7.990", priceNote: " x 6 meses", oldPrice: "$15.990", discount: "44%",
       spec: "450 GB en alta velocidad · 5G",
       includes: ["Redes sociales libres", "Minutos libres y 500 SMS", "Roaming: datos ilimitados 10 días en 24 países"] },
     { id: 2, name: "Plan Libre 800", price: "$11.990", priceNote: " x 6 meses", oldPrice: "$18.990", discount: "37%",
