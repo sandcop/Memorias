@@ -93,12 +93,13 @@ updateHeaderOnScroll();
   const wrap = document.getElementById("testiWrap");
   const list = document.getElementById("testiList");
   const headline = document.getElementById("testiHeadline");
+  const name = document.getElementById("testiName");
   const body = document.getElementById("testiBody");
-  const badge = document.getElementById("testiBadge");
   if (!list) return;
 
   let items = [];
   let active = 0;
+  let timer = null;
 
   function starString(rating) {
     const n = Math.round(rating) || 0;
@@ -108,33 +109,42 @@ updateHeaderOnScroll();
   function renderList() {
     list.innerHTML = "";
     items.forEach((t, i) => {
-      const tab = document.createElement("button");
-      tab.type = "button";
-      tab.className = "testi-tab" + (i === active ? " is-active" : "");
-      tab.setAttribute("role", "tab");
-      tab.setAttribute("aria-selected", String(i === active));
-      tab.innerHTML = `
-        <span class="testi-tab-avatar" aria-hidden="true">${
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "testi-avatar-btn" + (i === active ? " is-active" : "");
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-selected", String(i === active));
+      btn.setAttribute("aria-label", t.name);
+      btn.innerHTML = `
+        <span class="testi-avatar-img" aria-hidden="true">${
           t.photo ? `<img src="${t.photo}" alt="" loading="lazy">` : t.avatar
-        }</span>
-        <span class="testi-tab-info">
-          <strong>${t.name}</strong>
-          <span>${t.role}</span>
-        </span>`;
-      tab.addEventListener("click", () => {
+        }</span>`;
+      btn.addEventListener("click", () => {
         active = i;
         renderList();
         renderDetail();
+        restartAutoplay();
       });
-      list.appendChild(tab);
+      list.appendChild(btn);
     });
   }
 
   function renderDetail() {
     const t = items[active];
     if (!t) return;
-    headline.textContent = starString(t.rating);
     body.textContent = t.body;
+    name.textContent = t.name;
+    headline.textContent = starString(t.rating);
+  }
+
+  function restartAutoplay() {
+    if (timer) clearInterval(timer);
+    if (items.length < 2) return;
+    timer = setInterval(() => {
+      active = (active + 1) % items.length;
+      renderList();
+      renderDetail();
+    }, 5000);
   }
 
   async function loadReviews() {
@@ -159,13 +169,9 @@ updateHeaderOnScroll();
       if (!items.length) throw new Error("sin reseñas de 4+ estrellas");
 
       if (wrap) wrap.hidden = false;
-      if (badge && data.result.rating) {
-        badge.hidden = false;
-        badge.querySelector("span").textContent =
-          `⭐ ${data.result.rating} · ${data.result.user_ratings_total || 0} reseñas en Google`;
-      }
       renderList();
       renderDetail();
+      restartAutoplay();
     } catch (err) {
       if (wrap) wrap.hidden = true;
     }
