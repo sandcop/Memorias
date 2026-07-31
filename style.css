@@ -10,7 +10,7 @@
   --ink:          #0A1B2E;
   --ink-2:        #223A54;
   --muted:        #5B6B80;
-  --blue:         #0576D8;                   /* azul Movistar */
+  --blue:         #0576D8;                   /* azul principal */
   --blue-hover:   #0468BF;
   --blue-dark:    #04223F;                   /* navy profundo */
   --blue-soft:    #EAF3FC;
@@ -275,8 +275,8 @@ header.scrolled .menu-toggle span{ background:var(--blue-dark); }
 @keyframes hero-bg-fade{
   0%   { opacity:0; }
   6%   { opacity:.85; }
-  19%  { opacity:.85; }
-  25%  { opacity:0; }
+  31%  { opacity:.85; }
+  37%  { opacity:0; }
   100% { opacity:0; }
 }
 .hero-overlay{
@@ -478,6 +478,13 @@ header.scrolled .menu-toggle span{ background:var(--blue-dark); }
 .plan-body{ padding:2.4rem 2.4rem 2.2rem; }
 .plan-body > h3{ font-size:1.5rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.4rem; }
 .plan-body > .plan-sub{ font-size:.92rem; color:var(--muted); margin-bottom:1.5rem; }
+.plan-disclaimer{
+  display:flex; align-items:flex-start; gap:.6rem;
+  padding:.85rem 1rem; margin:-.6rem 0 1.5rem;
+  background:var(--surface-2); border-radius:var(--r-md);
+  font-size:.84rem; line-height:1.5; color:var(--muted);
+}
+.plan-disclaimer svg{ width:18px; height:18px; flex:none; margin-top:.1rem; color:var(--blue); }
 
 /* segmented control */
 .seg{
@@ -576,9 +583,9 @@ header.scrolled .menu-toggle span{ background:var(--blue-dark); }
 }
 
 /* ==========================================================
-   MOVISTAR FULL
+   PLAN IDEAL
    ========================================================== */
-#movistar-full{
+#plan-ideal{
   position:relative; overflow:hidden;
   background:#031830; color:#fff;
 }
@@ -595,14 +602,14 @@ header.scrolled .menu-toggle span{ background:var(--blue-dark); }
     radial-gradient(1000px 600px at 88% -10%, rgba(0,181,172,.24), transparent 60%),
     linear-gradient(100deg, rgba(3,20,40,.9) 0%, rgba(4,26,50,.68) 40%, rgba(4,26,50,.55) 100%);
 }
-#movistar-full > .wrap{ position:relative; z-index:2; }
-#movistar-full .eyebrow{ color:#8FD8FF; }
-#movistar-full .eyebrow::before{ background:#8FD8FF; }
-#movistar-full h2{ color:#fff; }
-#movistar-full .full-copy p{ color:rgba(255,255,255,.75); }
-#movistar-full .full-copy p strong{ color:#fff; }
-#movistar-full .btn-note{ color:rgba(255,255,255,.62); }
-#movistar-full .full-cards-note{ color:rgba(255,255,255,.62); }
+#plan-ideal > .wrap{ position:relative; z-index:2; }
+#plan-ideal .eyebrow{ color:#8FD8FF; }
+#plan-ideal .eyebrow::before{ background:#8FD8FF; }
+#plan-ideal h2{ color:#fff; }
+#plan-ideal .full-copy p{ color:rgba(255,255,255,.75); }
+#plan-ideal .full-copy p strong{ color:#fff; }
+#plan-ideal .btn-note{ color:rgba(255,255,255,.62); }
+#plan-ideal .full-cards-note{ color:rgba(255,255,255,.62); }
 @media (prefers-reduced-motion: reduce){
   .full-bg-slideshow img{ transition:none; }
 }

@@ -3,75 +3,75 @@
    ========================================================== */
 const CONFIG = {
   whatsapp: "56961017402",
-  /* Backend del CRM (Manu Conecta). Pega aquí la URL que te da Apps
-     Script al desplegar eac/crm/Code.gs como aplicación web — hasta
-     entonces el popup "Contratar" guarda el intento localmente y no
-     falla, pero no crea el lead en el CRM. */
+  /* Backend del CRM (Manu Conecta) — usado solo para traer las reseñas
+     reales de Google que se muestran en "Sobre mí". Se despliega
+     eac/crm/Code.gs como aplicación web. No recolecta datos de visitantes. */
   scriptUrl: "https://script.google.com/macros/s/AKfycbxo6aCIz_344ITXiSiLnyM_fbbvU4jFu12WfiHFgvwW8Zma2ri0qZexxk7lFBEz-cdf/exec",
   crmToken: "qkD1yR6CD6xPm1pzRUmACLMtz3JyLRZf"
 };
 
 /* ==========================================================
-   PLANES — precios y promociones vigentes al 2026-07-08.
-   Actualiza aquí cuando cambien las promociones oficiales Movistar.
+   PLANES — nombres y condiciones vigentes al 2026-07-08.
+   Los precios no se muestran en el sitio: son los oficiales
+   y se confirman por WhatsApp al momento de contratar.
    ========================================================== */
 const PLANS = {
   movil: [
-    { id: 1, name: "Plan Libre 450", price: "$7.990", priceNote: " x 6 meses", oldPrice: "$15.990", discount: "44%",
+    { id: 1, name: "Plan Libre 450",
       spec: "450 GB en alta velocidad · 5G",
       includes: ["Redes sociales libres", "Minutos libres y 500 SMS", "Roaming: datos ilimitados 10 días en 24 países"] },
-    { id: 2, name: "Plan Libre 800", price: "$11.990", priceNote: " x 6 meses", oldPrice: "$18.990", discount: "37%",
+    { id: 2, name: "Plan Libre 800",
       spec: "800 GB en alta velocidad · 5G",
       includes: ["Redes sociales libres", "Minutos libres y 500 SMS", "Roaming: datos ilimitados 10 días en 24 países"] },
-    { id: 3, name: "Plan Libre 1000", price: "$14.990", priceNote: " x 6 meses", oldPrice: "$23.990", discount: "38%",
+    { id: 3, name: "Plan Libre 1000",
       spec: "1000 GB en alta velocidad · 5G",
       includes: ["Redes sociales libres", "Minutos libres y 500 SMS", "Roaming: datos ilimitados 21 días en 30 países"] }
   ],
   fibra: [
-    { id: 1, name: "Fibra 600 Megas", price: "$15.990", priceNote: " x 6 meses", oldPrice: "$18.990", discount: "15%",
+    { id: 1, name: "Fibra 600 Megas",
       spec: "600 Mbps simétrica",
       includes: ["Incluye router"] },
-    { id: 2, name: "Fibra 800 Megas", price: "$19.990", priceNote: " precio único", oldPrice: null, discount: null,
+    { id: 2, name: "Fibra 800 Megas",
       spec: "800 Mbps simétrica",
       includes: ["Incluye router", "Incluye Paramount+"] },
-    { id: 3, name: "Fibra Giga", price: "$19.990", priceNote: " x 12 meses", oldPrice: "$26.990", discount: "26%",
+    { id: 3, name: "Fibra Giga",
       spec: "940 Mbps simétrica",
       includes: ["Incluye router WiFi 6"] }
   ],
   tv: [
-    { id: 1, name: "Dúo Fibra 600 + TV Inicia", price: "$29.990", priceNote: " x 6 meses", oldPrice: "$36.990", discount: "19%",
+    { id: 1, name: "Dúo Fibra 600 + TV Inicia",
       spec: "600 Mbps · TV Inicia HD",
-      includes: ["95 canales + 10 nacionales", "Incluye router", "Movistar TV + HBO Max (c/anuncios)", "Disponible desde el 1° de junio"] },
-    { id: 2, name: "Dúo Fibra 800 + TV Full", price: "$37.990", priceNote: " precio único", oldPrice: null, discount: null,
+      includes: ["95 canales + 10 nacionales", "Incluye router", "TV + HBO Max (c/anuncios)", "Disponible desde el 1° de junio"] },
+    { id: 2, name: "Dúo Fibra 800 + TV Full",
       spec: "800 Mbps · TV Full HD",
-      includes: ["102 canales + 10 nacionales", "Incluye router", "Movistar TV + HBO Max + Paramount+"] },
-    { id: 3, name: "Dúo Fibra Giga + TV Pro", price: "$33.990", priceNote: " x 12 meses", oldPrice: "$52.990", discount: "35%",
+      includes: ["102 canales + 10 nacionales", "Incluye router", "TV + HBO Max + Paramount+"] },
+    { id: 3, name: "Dúo Fibra Giga + TV Pro",
       spec: "940 Mbps · TV Pro HD",
-      includes: ["102 canales + 10 nacionales", "Router WiFi 6", "Movistar TV + HBO Max + Disney+"] }
+      includes: ["102 canales + 10 nacionales", "Router WiFi 6", "TV + HBO Max + Disney+"] }
   ],
   soloTv: [
-    { id: 1, name: "TV Inicia", price: "$24.990", priceNote: " precio normal", oldPrice: null, discount: null,
+    { id: 1, name: "TV Inicia",
       spec: "IPTV · Decodificador HD",
-      includes: ["95 canales + 10 nacionales", "Movistar TV + HBO Max (c/anuncios)"] },
-    { id: 2, name: "TV Full", price: "$26.990", priceNote: " precio normal", oldPrice: null, discount: null,
+      includes: ["95 canales + 10 nacionales", "TV + HBO Max (c/anuncios)"] },
+    { id: 2, name: "TV Full",
       spec: "IPTV · Decodificador HD",
-      includes: ["102 canales + 10 nacionales", "Movistar TV + HBO Max"] },
-    { id: 3, name: "TV Pro", price: "$29.990", priceNote: " precio normal", oldPrice: null, discount: null,
+      includes: ["102 canales + 10 nacionales", "TV + HBO Max"] },
+    { id: 3, name: "TV Pro",
       spec: "IPTV · Decodificador HD",
-      includes: ["102 canales + 10 nacionales", "Movistar TV + HBO Max + Disney+"] }
+      includes: ["102 canales + 10 nacionales", "TV + HBO Max + Disney+"] }
   ],
   full: [
-    { id: 1, name: "Fibra 800 Megas + Móvil", price: "$29.980", priceNote: " precio único", oldPrice: null, discount: null,
+    { id: 1, name: "Fibra 800 Megas + Móvil",
       spec: "Internet + Móvil",
-      includes: ["Fibra 800 Megas + router incluido", "Plan Móvil Libre 400 GB · RRSS y minutos ilimitados", "Precio SIM $1.990"] },
-    { id: 2, name: "Dúo Fibra 800 Megas + TV Full + Móvil", price: "$47.980", priceNote: " precio único", oldPrice: null, discount: null,
+      includes: ["Fibra 800 Megas + router incluido", "Plan Móvil Libre 400 GB · RRSS y minutos ilimitados", "Incluye SIM"] },
+    { id: 2, name: "Dúo Fibra 800 Megas + TV Full + Móvil",
       spec: "Internet + TV + Móvil",
-      includes: ["Fibra 800 Megas + router incluido", "TV Full HD · 102 canales + 10 nacionales", "Plan Móvil Libre 400 GB · RRSS y minutos ilimitados", "Precio SIM $1.990"] }
+      includes: ["Fibra 800 Megas + router incluido", "TV Full HD · 102 canales + 10 nacionales", "Plan Móvil Libre 400 GB · RRSS y minutos ilimitados", "Incluye SIM"] }
   ]
 };
 
 const PLAN_EXTRA_NOTES = {
-  movil: "Líneas adicionales: $4.990 x 6 meses (precio normal desde el mes 7: $9.990).",
+  movil: "Puedes agregar líneas adicionales; te confirmo el valor promocional vigente por WhatsApp.",
   fibra: "",
   tv: "",
   soloTv: ""
@@ -161,7 +161,7 @@ updateHeaderOnScroll();
         .map(r => ({
           avatar: (r.author_name || "?").trim().charAt(0).toUpperCase(),
           photo: r.profile_photo_url || "",
-          name: r.author_name || "Cliente Movistar",
+          name: r.author_name || "Cliente",
           role: r.relative_time_description || "",
           rating: r.rating || 5,
           body: r.text || ""
@@ -180,22 +180,13 @@ updateHeaderOnScroll();
   loadReviews();
 })();
 
-/* ---------- configurador de planes + modal de contratación ---------- */
+/* ---------- configurador de planes + CTA de WhatsApp ---------- */
 (function(){
-  const CATEGORY_LABELS = { movil: "Móvil", fibra: "Internet Hogar", tv: "Internet + TV", soloTv: "Solo TV", full: "Movistar Full" };
-  const CATEGORY_FIELDS = {
-    movil:  { install: false, lines: true },
-    fibra:  { install: true,  lines: false },
-    tv:     { install: true,  lines: false },
-    soloTv: { install: true,  lines: false },
-    full:   { install: true,  lines: true }
-  };
+  const CATEGORY_LABELS = { movil: "Móvil", fibra: "Internet Hogar", tv: "Internet + TV", soloTv: "Solo TV", full: "Plan Ideal" };
 
   let category = "movil";
   let selectedId = 1;
   let fmcSelectedId = 1;
-  let lines = [];
-  let lineCount = 0;
 
   const movilBtn   = document.getElementById("movilBtn");
   const fibraBtn   = document.getElementById("fibraBtn");
@@ -214,10 +205,6 @@ updateHeaderOnScroll();
           <div class="plan-photo-content">
             <span class="plan-photo-category">${CATEGORY_LABELS[cat]}</span>
             <h4>${plan.name}</h4>
-            <div class="plan-photo-price">
-              ${plan.price}<small>${plan.priceNote}</small>
-              ${plan.oldPrice ? `<s>${plan.oldPrice}</s>` : ""}
-            </div>
             <ul class="plan-photo-includes">
               ${plan.includes.map(item => `<li>${item}</li>`).join("")}
             </ul>
@@ -248,13 +235,8 @@ updateHeaderOnScroll();
         <span class="plan-option-main">
           <span class="plan-option-row">
             <h4>${plan.name}</h4>
-            <span class="plan-price">
-              ${plan.price}<small>${plan.priceNote}</small>
-              ${plan.oldPrice ? `<s class="plan-price-old">${plan.oldPrice}</s>` : ""}
-            </span>
           </span>
           <span class="plan-spec">${plan.spec}</span>
-          ${plan.discount ? `<span class="plan-discount">${plan.discount} dcto</span>` : ""}
         </span>`;
       card.addEventListener("click", () => {
         selectedId = plan.id;
@@ -266,6 +248,13 @@ updateHeaderOnScroll();
     const extraNote = PLAN_EXTRA_NOTES[category];
     planExtraNote.textContent = extraNote || "";
     planExtraNote.style.visibility = extraNote ? "visible" : "hidden";
+    contractTrigger.href = planWhatsAppUrl(category, selectedId);
+  }
+
+  function planWhatsAppUrl(cat, selId) {
+    const plan = PLANS[cat].find(p => p.id === selId);
+    const text = `Hola Manu, quiero contratar ${plan.name} (${CATEGORY_LABELS[cat]})`;
+    return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
   }
 
   function setCategory(next) {
@@ -286,198 +275,27 @@ updateHeaderOnScroll();
   renderPlans();
   updatePhoto();
 
-  /* ---- modal: contratar (crea el lead en el backend al enviar) ---- */
-  let currentModalPlan = null;
-  const backdrop        = document.getElementById("contractBackdrop");
-  const modal            = document.getElementById("contractModal");
-  const modalTitle       = document.getElementById("contractModalTitle");
-  const modalSummary     = document.getElementById("modalPlanSummary");
-  const modalForm        = document.getElementById("contractForm");
-  const modalSuccess     = document.getElementById("contractSuccess");
-  const installWrap      = document.getElementById("cf-install-wrap");
-  const linesWrap        = document.getElementById("cf-lines-wrap");
-  const linesList        = document.getElementById("cf-lines-list");
-  const addLineBtn       = document.getElementById("cf-add-line");
-  const modalCloseBtn    = document.getElementById("contractClose");
-  const successCloseBtn  = document.getElementById("contractSuccessClose");
-
-  function addLine(type = "nueva") {
-    lineCount += 1;
-    lines.push({ index: lineCount, type, number: "", quantity: 1 });
-    renderLines();
-  }
-
-  function removeLine(index) {
-    lines = lines.filter(l => l.index !== index);
-    renderLines();
-  }
-
-  function renderLines() {
-    linesList.innerHTML = "";
-    lines.forEach((line, i) => {
-      const item = document.createElement("div");
-      item.className = "line-item";
-      const extraField = line.type === "portabilidad"
-        ? `<div class="form-field">
-             <label>Número a portar</label>
-             <input type="tel" data-port-number="${line.index}" placeholder="+56 9 1234 5678" value="${line.number}">
-           </div>`
-        : `<div class="form-field">
-             <label>¿Cuántas líneas nuevas quieres?</label>
-             <input type="number" min="1" max="10" data-quantity="${line.index}" value="${line.quantity}">
-           </div>`;
-      item.innerHTML = `
-        <div class="line-item-head">
-          <span>Línea ${i + 1}</span>
-          ${lines.length > 1 ? `<button type="button" class="line-remove" data-remove="${line.index}">Eliminar</button>` : ""}
-        </div>
-        <div class="line-toggle" role="radiogroup" aria-label="Tipo de línea ${i + 1}">
-          <label class="line-radio">
-            <input type="radio" name="line-type-${line.index}" value="nueva" ${line.type === "nueva" ? "checked" : ""}>
-            <span>Línea nueva</span>
-          </label>
-          <label class="line-radio">
-            <input type="radio" name="line-type-${line.index}" value="portabilidad" ${line.type === "portabilidad" ? "checked" : ""}>
-            <span>Portabilidad</span>
-          </label>
-        </div>
-        ${extraField}`;
-      linesList.appendChild(item);
-    });
-
-    linesList.querySelectorAll("[data-remove]").forEach(btn => {
-      btn.addEventListener("click", () => removeLine(Number(btn.dataset.remove)));
-    });
-    linesList.querySelectorAll("input[type=radio]").forEach(radio => {
-      radio.addEventListener("change", (e) => {
-        const line = lines.find(l => `line-type-${l.index}` === e.target.name);
-        line.type = e.target.value;
-        renderLines();
-      });
-    });
-    linesList.querySelectorAll("[data-port-number]").forEach(input => {
-      input.addEventListener("input", (e) => {
-        const line = lines.find(l => l.index === Number(e.target.dataset.portNumber));
-        line.number = e.target.value;
-      });
-    });
-    linesList.querySelectorAll("[data-quantity]").forEach(input => {
-      input.addEventListener("input", (e) => {
-        const line = lines.find(l => l.index === Number(e.target.dataset.quantity));
-        line.quantity = e.target.value;
-      });
-    });
-
-    addLineBtn.hidden = !lines.some(l => l.type === "portabilidad");
-  }
-
-  addLineBtn.addEventListener("click", () => addLine("portabilidad"));
-
-  function openModal(cat, selId) {
-    cat = cat || category;
-    selId = selId != null ? selId : selectedId;
-    const plan = PLANS[cat].find(p => p.id === selId);
-    const fields = CATEGORY_FIELDS[cat];
-    currentModalPlan = { category: cat, categoryLabel: CATEGORY_LABELS[cat], name: plan.name };
-    modalTitle.textContent = `Contratar ${CATEGORY_LABELS[cat]}`;
-    modalSummary.innerHTML = `<strong>${plan.name}</strong><span>${CATEGORY_LABELS[cat]} · ${plan.price}${plan.priceNote}</span>`;
-
-    installWrap.hidden = !fields.install;
-    linesWrap.hidden = !fields.lines;
-
-    modalForm.reset();
-    if (fields.lines) {
-      lines = [];
-      lineCount = 0;
-      addLine();
-    }
-
-    modalForm.hidden = false;
-    modalSuccess.hidden = true;
-
-    backdrop.classList.add("open");
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeModal() {
-    backdrop.classList.remove("open");
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  contractTrigger.addEventListener("click", () => openModal());
-  modalCloseBtn.addEventListener("click", closeModal);
-  backdrop.addEventListener("click", closeModal);
-  successCloseBtn.addEventListener("click", closeModal);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
-  });
-
-  const modalErrorEl = document.getElementById("modal-error");
-
-  modalForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!modalForm.checkValidity()) {
-      modalForm.reportValidity();
-      return;
-    }
-
-    const submitBtn = modalForm.querySelector(".modal-submit");
-    const originalLabel = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Enviando…";
-    modalErrorEl.hidden = true;
-
-    const payload = {
-      type: "createLead",
-      token: CONFIG.crmToken,
-      fromWebsite: true,
-      nombre: document.getElementById("cf-name").value.trim(),
-      telefono: document.getElementById("cf-phone").value.trim(),
-      correo: document.getElementById("cf-email").value.trim(),
-      direccion: document.getElementById("cf-address").value.trim(),
-      direccion_instalacion: installWrap.hidden ? "" : (document.getElementById("cf-install").value || "").trim(),
-      plan_categoria: currentModalPlan ? currentModalPlan.categoryLabel : "",
-      plan_nombre: currentModalPlan ? currentModalPlan.name : "",
-      lineas_json: linesWrap.hidden ? "" : JSON.stringify(lines),
-      origen: "landing-popup"
-    };
-
-    try {
-      if (CONFIG.scriptUrl && CONFIG.scriptUrl !== "PENDIENTE_DESPLEGAR_CODE_GS") {
-        const url = CONFIG.scriptUrl + "?data=" + encodeURIComponent(JSON.stringify(payload));
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-      }
-      modalForm.hidden = true;
-      modalSuccess.hidden = false;
-    } catch (err) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalLabel;
-      modalErrorEl.textContent = "No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos directo por WhatsApp.";
-      modalErrorEl.hidden = false;
-    }
-  });
-
-  /* ---- Movistar Full: fondo cambia según la tarjeta seleccionada, 1 solo CTA ---- */
+  /* ---- Plan Ideal: fondo cambia según la tarjeta seleccionada, CTA de WhatsApp ---- */
   const fmcCards = document.querySelectorAll(".full-card[data-fmc-index]");
   const fmcBgImages = document.querySelectorAll(".full-bg-slideshow img");
   const fmcContratarBtn = document.getElementById("fmc-contratar");
+
+  function fmcWhatsAppUrl(selId) {
+    const plan = PLANS.full.find(p => p.id === selId);
+    const text = `Hola Manu, quiero contratar ${plan.name} (Plan Ideal)`;
+    return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+  }
+
   fmcCards.forEach(card => {
     card.addEventListener("click", () => {
       const idx = card.dataset.fmcIndex;
       fmcSelectedId = Number(idx) + 1;
       fmcCards.forEach(c => c.classList.toggle("is-selected", c === card));
       fmcBgImages.forEach(img => img.classList.toggle("is-visible", img.dataset.fmcBg === idx));
+      if (fmcContratarBtn) fmcContratarBtn.href = fmcWhatsAppUrl(fmcSelectedId);
     });
   });
-  if (fmcContratarBtn) {
-    fmcContratarBtn.addEventListener("click", () => openModal("full", fmcSelectedId));
-  }
+  if (fmcContratarBtn) fmcContratarBtn.href = fmcWhatsAppUrl(fmcSelectedId);
 })();
 
 /* ---------- tabs de equipos (con estado accesible) ---------- */

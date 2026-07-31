@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="ASSETS/LOGO/SVG/FAVICON.svg">
 
-<title id="page-title">Blog | Manu Rojas — Ejecutivo Movistar Antofagasta</title>
+<title id="page-title">Blog | Manu Rojas — Ejecutivo de Telefonía Antofagasta</title>
 <meta name="description" id="page-description" content="Guías sobre portabilidad, fibra óptica, líneas 5G y equipos financiados en Antofagasta.">
 <meta name="robots" content="index, follow">
 
@@ -25,7 +25,7 @@
     <nav aria-label="Principal">
       <ul class="nav-links">
         <li><a href="index.html#elige-plan">Planes</a></li>
-        <li><a href="index.html#movistar-full">Movistar Full</a></li>
+        <li><a href="index.html#plan-ideal">Plan Ideal</a></li>
         <li><a href="index.html#equipos">Equipos</a></li>
         <li><a href="index.html#sobre-mi">Sobre mí</a></li>
         <li><a href="index.html#blog" class="active">Blog</a></li>
@@ -53,7 +53,7 @@
   </div>
   <ul class="mobile-menu-links">
     <li><a href="index.html#elige-plan">Planes</a></li>
-    <li><a href="index.html#movistar-full">Movistar Full</a></li>
+    <li><a href="index.html#plan-ideal">Plan Ideal</a></li>
     <li><a href="index.html#equipos">Equipos</a></li>
     <li><a href="index.html#sobre-mi">Sobre mí</a></li>
     <li><a href="index.html#blog">Blog</a></li>
@@ -92,12 +92,12 @@
       <a class="footer-logo" href="index.html#inicio" aria-label="Manu Conecta, inicio">
         <img class="brand-logo" src="ASSETS/LOGO/SVG/logo_manu.svg" alt="Manu Conecta">
       </a>
-      <p>Ejecutivo comercial Movistar en Antofagasta. Planes móviles, fibra óptica, equipos y portabilidad, con atención personalizada de principio a fin.</p>
+      <p>Ejecutivo comercial de telefonía en Antofagasta. Planes móviles, fibra óptica, equipos y portabilidad, con atención personalizada de principio a fin.</p>
     </div>
     <div class="footer-col">
       <h3>Navegación</h3>
       <a href="index.html#elige-plan">Planes</a>
-      <a href="index.html#movistar-full">Movistar Full</a>
+      <a href="index.html#plan-ideal">Plan Ideal</a>
       <a href="index.html#equipos">Equipos</a>
       <a href="index.html#sobre-mi">Sobre mí</a>
       <a href="index.html#blog">Blog</a>
@@ -110,7 +110,7 @@
     </div>
   </div>
   <div class="wrap footer-bottom">
-    <span>© <span id="year"></span> Manuel Rojas · Ejecutivo Movistar · Antofagasta, Chile</span>
+    <span>© <span id="year"></span> Manuel Rojas · Ejecutivo de Telefonía · Antofagasta, Chile</span>
     <span>Sucursal Uribe 746 · <a href="https://maps.app.goo.gl/JsAMTh5Kj2jYXbzM6" target="_blank" rel="noopener">Ver en Google Maps</a></span>
   </div>
 </footer>
@@ -136,7 +136,7 @@ async function renderBlogPost() {
       content.innerHTML = `<p style="color:var(--muted);margin-top:1.5rem;">No encontramos ese artículo. <a class="btn-link" href="index.html#blog">Volver al blog</a></p>`;
       return;
     }
-    document.getElementById("page-title").textContent = post.title + " | Manu Rojas — Ejecutivo Movistar Antofagasta";
+    document.getElementById("page-title").textContent = post.title + " | Manu Rojas — Ejecutivo de Telefonía Antofagasta";
     if (post.excerpt) document.getElementById("page-description").setAttribute("content", post.excerpt);
 
     content.innerHTML = `
